@@ -79,7 +79,7 @@ class LoginAuth extends Controller
             // return response()->json($name . "  Succesfully yours");
             // users, ous, announcements
             return response()->json([
-                'success' => false,
+                'success' => true,
                 'ous' => $name,
                 'users' => "ous",
                 'data' => $dataarray,
