@@ -77,11 +77,16 @@ class LoginAuth extends Controller
             $dataarray = [];
             $dataarray[] = ['name' => $name,'ou' => $finalOU];
             // return response()->json($name . "  Succesfully yours");
+
+
+            // $user = Users::where('ntlogin', "jmbelicano")->get();
+
+
             // users, ous, announcements
             return response()->json([
                 'success' => true,
                 'ous' => $name,
-                'users' => "ous",
+                'users' => $finalOU,
                 'data' => $dataarray,
                 'announcements' => "announcesment",
                 'errors' => false
