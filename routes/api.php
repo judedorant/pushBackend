@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Ldap\LoginAuth;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,17 +19,22 @@ use App\Http\Controllers\Ldap\LoginAuth;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     // return "test";
+    return response()->json(['user' => $request->user()]);
 });
 Route::get('/token', function (Request $request){
     // return "test";
     // return response()->json(['csrf-cookie' => csrf_token()]);
 });
 Route::get('/users', [LoginAuth::class, 'getusers']);
+Route::get('/profile/{employee_number}', [ProfileController::class, 'index']);
 
-// ->middleware('')
 
 // Route::group(['middleware' => ['guest', 'LogHeaders']], function () {
     Route::post('/login', [LoginAuth::class, 'authLdap']);
+    Route::post('/logout', [LoginAuth::class, 'destroy'])
+                ->name('logout');
+
+
     // Route::post('/login', function (Request $request) {
     // // Route::post('authentication', ['as' => 'authentication_ldap', 'uses' => 'Ldap\LoginAuth@authLdap']);
 

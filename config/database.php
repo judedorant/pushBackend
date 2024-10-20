@@ -88,6 +88,21 @@ return [
         //         PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
         //     ]) : [],
         // ],
+        'mysql2' => [
+            'driver'    => 'mysql',
+            // 'host'      => '172.30.1.202',
+            'host'      => '172.30.1.104',
+            'database'  => 'masterfile',
+            'username'  => 'push',
+            // 'username'  => 'root',
+            'password'  => 'p4n4s14t1c',
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+            'options'   => [ PDO::ATTR_EMULATE_PREPARES => true ]
+        ],
+
 
         'pgsql' => [
             'driver' => 'pgsql',

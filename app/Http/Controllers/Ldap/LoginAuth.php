@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Ldap;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 use App\Models\Users;
 
 
@@ -63,32 +65,31 @@ class LoginAuth extends Controller
             }
 
 			$userInfo = ['displayName' => isset($entries[0]['displayname'][0]) ? $entries[0]['displayname'][0] : 'Unknown','organizationalUnit' => $entries[0]['dn'],];
-			$name = $userInfo['displayName'];
+		    $employeeNumber = isset($entries[0]['employeenumber'][0]) ? $entries[0]['employeenumber'][0] : 'Not available';
+            $name = $userInfo['displayName'];
 			$ou1 = $entries[0]['dn'];
 
 			$getstringName = strlen($name);
 			$finalOU = substr($ou1, ($getstringName + 4));
-
+           
 
 			 // Extract the Organizational Unit (OU) from the DN
 			 preg_match('/OU=([^,]+)/', $ou1, $ouMatches);
 			 $ou = isset($ouMatches[1]) ? $ouMatches[1] : $ou1;
 
             $dataarray = [];
-            $dataarray[] = ['name' => $name,'ou' => $finalOU];
+            $dataarray[] = ['name' => $name,'ou' => $finalOU, 'ntlogin' => $ntlogin, 'employee_number' =>  $employeeNumber];
             // return response()->json($name . "  Succesfully yours");
 
 
             // $user = Users::where('ntlogin', "jmbelicano")->get();
-
-
             // users, ous, announcements
             return response()->json([
                 'success' => true,
-                'ous' => $name,
-                'users' => $finalOU,
+                // 'ous' => $name,
+                // 'users' => $finalOU,
                 'data' => $dataarray,
-                'announcements' => "announcesment",
+                // 'announcements' => "announcesment",
                 'errors' => false
             ], 200);
 
@@ -101,9 +102,18 @@ class LoginAuth extends Controller
 
             return response()->json([
                 'success' => false,
-                'data' => 'Account is Disabled. Please contact IT to enable your NT account',
+                'data' => 'NTLogin or Password is incorrect!',
                 'errors' => true,
             ], 500);
         }
     }
+    public function destroy(Request $request): JsonResponse
+{
+    Auth::guard('web')->logout();
+
+    return response()->json([
+        'success' => true,
+        'errors' => false
+    ], 200);
+}
 }
